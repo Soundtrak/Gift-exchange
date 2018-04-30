@@ -9,8 +9,10 @@
   "author": "bam",
   "license": "ISC",
   "dependencies": {
+    "basic-auth": "^2.0.0",
     "body-parser": "^1.18.2",
     "express": "*",
+    "lodash": "^4.17.10",
     "pg": "^7.4.1"
   }
 }

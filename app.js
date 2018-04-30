@@ -1,16 +1,15 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const pg = require('pg');
-const auth = require('./auth');
-
-// Initialize express app
 const app = express();
+const bodyParser = require('body-parser');
+
+const routes = require('./routes.js');
 
 // Middleware
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Routers
-app.use('/auth', auth);
+app.use('/', routes);
 
 // http access-control
 app.use(function(req, res, next) {
