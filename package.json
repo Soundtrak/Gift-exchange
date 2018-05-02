@@ -4,7 +4,8 @@
   "description": "Secret santa app backend server",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=development node app.js",
+    "test": "mocha --exit --timeout 10000"
   },
   "author": "bam",
   "license": "ISC",
@@ -14,5 +15,10 @@
     "express": "*",
     "lodash": "^4.17.10",
     "pg": "^7.4.1"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "chai-http": "*",
+    "mocha": "*"
   }
 }
