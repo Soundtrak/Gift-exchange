@@ -32,14 +32,5 @@ describe('/users/:id/groups', () => {
         })
     });
 
-    it('Asking for all groups of id not matching auth. Should get 401.', (done) => {
-        chai.request(server).
-        get('/user/55/groups').
-        auth('test@test.com', 'test123').
-        end((err, res) => {
-            expect(res).to.have.status(401);
-            done();
-        })
-    });
 });
 

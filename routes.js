@@ -44,7 +44,7 @@ const auth = function (req, res, next) {
     });
 };
 
-// test route
+// Test route
 router.get('/', (req, res) => {
     res.send('working');
 });
@@ -54,7 +54,7 @@ router.get('/', (req, res) => {
 router.get('/user/', auth, getUser);
 
 function getUser(req, res) {
-    pool.query('select * from public.users where id = $1', [req.user.id], (err, result) => {
+    pool.query('select * from public.users where user_id = $1', [req.user.id], (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
