@@ -28,6 +28,44 @@ describe('/user/', () => {
         })
     });
 
+    it('Sends new user info in body. Attempt sign up with same email as previous. Should get back 400.', (done) => {
+        chai.request(server).
+        post('/user/').
+        send({
+            'email': 'test@test.com',
+            'password': 'Test123!',
+            'fn': 'John',
+            'ln': 'Doe'
+        }).
+        end((err, res) => {
+            //expect(res).to.have.status(200); TODO: <-
+            expect(res.body).to.be.eql('That email already exists.');
+            done();
+        })
+    });
+
+    it('Gets user info of previous test with basic auth.', (done) => {
+        chai.request(server).
+        get('/user/').
+        auth('test@test.com', 'Test123!').
+        end((err, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body.first_name).to.be.eql('John');
+            done();
+        })
+    });
+
+    it('Deletes user from previous test. Should get back 200.', (done) => {
+        chai.request(server).
+        delete('/user/').
+        auth('test@test.com', 'Test123!').
+        end((err, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.eql('User deleted.');
+            done();
+        })
+    });
+
     it('Sends new user info in body. Invalid email. Should get back 400.', (done) => {
         chai.request(server).
         post('/user/').

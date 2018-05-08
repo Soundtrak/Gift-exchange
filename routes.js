@@ -77,10 +77,26 @@ function validNames(fn, ln) {
     return (fn !== '' && ln !== '' && typeof fn === 'string' && typeof ln === 'string');
 }
 
+
+
 function addUser(req, res) {
     if (validEmail(req.body.email) && validPassword(req.body.password) && validNames(req.body.fn, req.body.ln)) {
-        // TODO: Check database for no duplicate emails. If duplicate exists, send error. If not, insert data and respond with confirmation instead of message below.
-        res.json('Sign up successful.');
+        pool.query('select email from public.users where email = $1', [req.body.email], (err, result) => {
+            if (err) {
+                console.log(err);
+            } else if (result.rows.length === 0){
+                pool.query('insert into public.users (email, password, first_name, last_name) ' +
+                    'values ($1, $2, $3, $4)', [req.body.email, req.body.password, req.body.fn, req.body.ln], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.json('Sign up successful.');
+                    }
+                })
+            }else {
+                res.json('That email already exists.');
+            }
+        });
     }
 
     else if (!validEmail(req.body.email)) {
@@ -107,7 +123,20 @@ function getUser(req, res) {
             console.log(err);
             res.send(err);
         } else {
-            res.send(result.rows);
+            res.send(result.rows[0]);
+            console.log(result.rows[0]);
+        }
+    })
+}
+
+router.delete('/user/', auth, deleteUser);
+
+function deleteUser(req, res) {
+    pool.query('delete from public.users where user_id = $1', [req.user.user_id], (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json('User deleted.');
         }
     })
 }
